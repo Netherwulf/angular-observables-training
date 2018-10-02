@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {Observable, Observer} from 'rxjs';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Observable, Observer, Subscription} from 'rxjs';
 import 'rxjs/Rx';
 
 @Component({
@@ -7,17 +7,19 @@ import 'rxjs/Rx';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
+  numbersObservableSubscription: Subscription;
+  customObservableSubscription: Subscription;
 
   constructor() { }
 
   ngOnInit() {
-    // const myNumbers = Observable.interval(1000);
-    // myNumbers.subscribe(
-    //   (number: number) => {
-    //     console.log(number);
-    //   }
-    // );
+    const myNumbers = Observable.interval(1000);
+    this.numbersObservableSubscription = myNumbers.subscribe(
+      (number: number) => {
+        console.log(number);
+      }
+    );
     const myObservable = Observable.create((observer: Observer<string>) => {
       setTimeout(() => {
         observer.next('first package');
@@ -35,7 +37,7 @@ export class HomeComponent implements OnInit {
         observer.next('third package');
       }, 7000);
     });
-    myObservable.subscribe(
+    this.customObservableSubscription = myObservable.subscribe(
       (data: string) => {
         console.log(data);
       },
@@ -46,6 +48,11 @@ export class HomeComponent implements OnInit {
         console.log('completed');
       }
     );
+  }
+
+  ngOnDestroy() {
+    this.numbersObservableSubscription.unsubscribe();
+    this.customObservableSubscription.unsubscribe();
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
 @Component({
@@ -19,5 +19,4 @@ export class UserComponent implements OnInit {
         }
       );
   }
-
 }
